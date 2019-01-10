@@ -31,8 +31,8 @@ my $DECODE_MSG;
 
 &GetOptions (
     'h' => \$help_flag,
-    'ENCODE_MSG=s' => \$ENCODE_MSG,
-    'DECODE_MSG=s' => \$DECODE_MSG
+    'encode=s' => \$ENCODE_MSG,
+    'decode=s' => \$DECODE_MSG
     );
 
 
@@ -80,7 +80,7 @@ main: {
 
     if ($ENCODE_MSG) {
         my $msg_to_encode = $ENCODE_MSG;
-        if (-f $ENCODE_MSG) {
+        if ($msg_to_encode !~ /\n/ && -f $ENCODE_MSG) {
             $msg_to_encode = `cat $ENCODE_MSG`;
         }
         &encode_message($msg_to_encode);
