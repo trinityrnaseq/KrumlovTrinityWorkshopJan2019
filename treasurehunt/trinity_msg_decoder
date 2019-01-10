@@ -3,16 +3,46 @@
 use strict;
 use warnings;
 
+use Carp;
+use Getopt::Long qw(:config posix_default no_ignore_case bundling pass_through);
+
+my $help_flag;
+
+
+my $usage = <<__EOUSAGE;
+
+###############################################################################
+##
+## --encode <string>    filename containing message to encode, or direct string containing msg
+##
+##  or
+##
+##  --decode <string>   filename containing sequence to decode into a message
+##
+###############################################################################
+
+__EOUSAGE
+
+    ;
+
+
+my $ENCODE_MSG;
+my $DECODE_MSG;
+
+&GetOptions (
+    'h' => \$help_flag,
+    'ENCODE_MSG=s' => \$ENCODE_MSG,
+    'DECODE_MSG=s' => \$DECODE_MSG
+    );
+
 
 my $DEBUG = 0;
 
-my $usage = "\n\n\tusage: $0 message\n\n";
-
-my $message = join(" ", @ARGV);
-
-unless($message) {
+unless ($ENCODE_MSG || $DECODE_MSG) {
     die $usage;
 }
+
+
 
 
 my @alphabet = qw(a b c d e f g h i j k l m n o p q r s t u v w x y z : / . 0 1 2 3 4 5 6 7 8 9 L I N E);
@@ -48,11 +78,15 @@ foreach my $key (keys %mapping) {
 
 main: {
 
-    if ($message =~ /\n/ || ! -f $message) {
-        &encode_message($message);
+    if ($ENCODE_MSG) {
+        my $msg_to_encode = $ENCODE_MSG;
+        if (-f $ENCODE_MSG) {
+            $msg_to_encode = `cat $ENCODE_MSG`;
+        }
+        &encode_message($msg_to_encode);
     }
     else {
-        my $decoded_msg = &decode_fasta($message);
+        my $decoded_msg = &decode_fasta($DECODE_MSG);
         if ($decoded_msg) {
             print $decoded_msg;
         }
