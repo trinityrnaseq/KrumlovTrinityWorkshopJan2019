@@ -1,7 +1,0 @@
-../trinity_msg_decoder --encode msg2.txt > target.stage2.seq.fa
-
-~/GITHUB/trinityrnaseq/util/misc/simulate_illuminaPE_from_transcripts.pl --transcripts target.stage2.seq.fa  --require_proper_pairs --frag_length 50 --read_length 30
-
-~/GITHUB/trinityrnaseq/Trinity --seqType fa --left reads.simPE_R30_F50_FR.left.fa --right reads.simPE_R30_F50_FR.right.fa --CPU 1 --max_memory 1G --bypass_java_version_check
-
-../trinity_msg_decoder --decode trinity_out_dir/Trinity.fasta
